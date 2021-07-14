@@ -2,10 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>JS Drum Kit</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Russ' Drum Kit</title>
+  <link rel="stylesheet" type="text/css" href="/style_ERversion.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Qahiri&display=swap" rel="stylesheet">
 </head>
 <body>
+
+  <h1 class="title">
+    Russ' Digital Drum Kit
+  </h1>
+  <h2>
+    Hit the keys on your keyboard to play
+  </h2>
+  <div class="icon">
+    <i class="fas fa-drum"></i>
+  </div>
 
 
   <div class="keys">
@@ -76,6 +90,8 @@
   keys.forEach(key => key.addEventListener('transitionend', removeTransition));
 
 </script>
+
+
 
 
 </body>
