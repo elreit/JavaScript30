@@ -14,11 +14,11 @@
       font-size: 20px;
       font-weight: 200;
     }
-    
+
     body {
       margin: 0;
     }
-    
+
     *, *:before, *:after {
       box-sizing: inherit;
     }
@@ -26,6 +26,7 @@
     .panels {
       min-height: 100vh;
       overflow: hidden;
+      display: flex;     /*puts all panels side by side*/
     }
 
     .panel {
@@ -43,6 +44,11 @@
       font-size: 20px;
       background-size: cover;
       background-position: center;
+      flex: 1;  /*all children items within the flex item will evenly distribute the extra room*/
+      justify-content: center;
+      align-items: center;
+      display: flex; /*enables a flex context for all its children i.e. the panels*/
+      flex-direction: column;
     }
 
     .panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
@@ -56,7 +62,16 @@
       margin: 0;
       width: 100%;
       transition: transform 0.5s;
+      flex: 1 0 auto; /*distributes the panel flex children equally within the flex box parent panel*/
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
+    .panel > *:first-child {transform: translateY(-100%);} /*this shifts 1st child of panel up the Y axis in a -100% direction off the page*/
+    .panel.open-active > *:first-child {transform: translateY(0);} /*when we apply the class open-active the translateY is set to 0 */
+    .panel > *:last-child {transform: translateY(100%);} /*this shifts 1st child of panel down the Y axis in a +100% direction off the page*/
+    .panel.open-active > *:last-child {transform: translateY(0);} /*when we ap ply the class open-active the translateY is set to 0*/
 
     .panel p {
       text-transform: uppercase;
@@ -64,13 +79,14 @@
       text-shadow: 0 0 4px rgba(0, 0, 0, 0.72), 0 0 14px rgba(0, 0, 0, 0.45);
       font-size: 2em;
     }
-    
+
     .panel p:nth-child(2) {
       font-size: 4em;
     }
 
     .panel.open {
       font-size: 40px;
+      flex: 5; /*the item will take up 5 times the amount of extra room than the rest of them who have a flex of 1, so it should grow a bit bigger*/
     }
 
   </style>
@@ -105,6 +121,31 @@
   </div>
 
   <script>
+    // select all the panels with .panel
+    const panels = document.querySelectorAll('.panel');
+
+
+    // create a function of toggleOpen that initiates the CSS saved in the class .open
+    function toggleOpen() {
+      this.classList.toggle('open');
+    };
+
+    // create a function of toggleActive that initiates the CSS saved in the class .panel.open-active
+    function toggleActive(e) {
+      if (e.propertyName.includes('flex')) {
+        this.classList.toggle('open-active');
+      }
+    };
+
+    // we listen for a click on each panel, when it clicks it init the toggleOpen function that adds the 'open' class to panel and triggers the CSS
+    panels.forEach(panel => {
+      panel.addEventListener('click', toggleOpen);
+    });
+
+    // when toggleOpen ends the next function is triggered with toggleActive to bring the words from top and bottom into the panel
+    panels.forEach(panel => {
+      panel.addEventListener('transitionend', toggleActive);
+    });
 
   </script>
 
