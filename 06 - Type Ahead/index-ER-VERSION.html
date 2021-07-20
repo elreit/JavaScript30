@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+  /*save the data to a var which we need to use to fetch the data*/
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+const cities = [];
+
+/*fetch returns a promise which you need to call .then on. we call .json on blob so it returns a json file also returns a promise so need to call .then again*/
+/*we then need to push the json data into the array. we need to spread ... the data to return it as an array object with individual arguments in cities*/
+fetch(endpoint)
+  .then(blob => blob.json())
+  .then(data => cities.push(...data));
+
+/*run a function that takes array and filter down to subset. takes in a word to match and the cities array as need to pass in the data to filter*/
+function findMatches(wordToMatch, cities) {
+  return cities.filter(place => {
+    /*now work out if city/state matches what was searched. Need to insert a variable into a regex which we create with const regex. g (global) and i(case insensitive)*/
+    const regex = new RegExp(wordToMatch, 'gi');
+    /*check if the either the city or state matches the regex given by the user in wordToMatch*/
+    return place.city.match(regex) || place.state.match(regex)
+  });
+}
+
+/*run a function that returns the number of population with commas in the right place*/
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+/*create the display function that changes when someone changes the value entered*/
+function displayMatches() {
+  /*saves the matches in the cities array to the value given*/
+  const matchArray = findMatches(this.value, cities);
+  /*map through all the objects returned in the matcharray variable and display per the below*/
+  const html = matchArray.map(place => {
+    const regex =  new RegExp(this.value, 'gi');
+    /*replace what is matched with the highlight. find what it matches in the rgeex and replace it with a span with class of hl*/
+    const cityName = place.city.replace(regex, `"<span class="hl">${this.value}</span>"`);
+    const stateName = place.state.replace(regex, `"<span class="hl">${this.value}</span>"`);
+    return `
+      <li>
+        <span class="name">${cityName}, ${stateName}</span>
+        <span class="population">${numberWithCommas(place.population)}</span>
+      </li>
+    `;
+  }).join('');
+  /*in the suggestions inner html we return the variable html and display the information as detailed above in const html*/
+  suggestions.innerHTML =  html;
+}
+
+const searchInput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+searchInput.addEventListener('change', displayMatches);
+searchInput.addEventListener('keyup', displayMatches);
+
+</script>
+</body>
+</html>
