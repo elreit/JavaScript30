@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+  const canvas = document.querySelector('#draw');
+  // in Canvas we draw on something called the context, can be 2d or 3d
+  const ctx = canvas.getContext('2d');
+  // size the canvas to be width and height of window
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  // canvas base settings
+  // start with a colour when you start drawing
+  ctx.strokeStyle = '#BADA55';
+  // when a line ends or joins another line it should be rounded, not squared off
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 100;
+
+  // dummy variables
+  let isDrawing = false; // set it to false when cursor is not clicked. if clicked down it is set to true
+  let lastX = 0;   //we need start and ending X and Y that will be where we end the line
+  let lastY = 0;
+  let hue = 0;
+  let direction = true;
+
+  //takes in an event and will be called whenever the mouse is dragged on canvas
+  function draw(e) {
+    if (!isDrawing) return; // stops fn from running when not mouse down
+    console.log(e);
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    ctx.beginPath();
+
+    ctx.moveTo(lastX, lastY); // start from - begin the first sub path at the point specified by the given X and Y coords
+    ctx.lineTo(e.offsetX, e.offsetY);     // end to - add a straight line to the current sub-path by connecting the sub-path's last point to the specified (x, y) coords of the line's end point
+    ctx.stroke(); //init the move with a single stroke call
+    [lastX, lastY] = [e.offsetX, e.offsetY]; // then we need to update x and y variables for when we do the next line movement
+    hue++; // increment the hue
+    if(hue >= 360) { // reset the hue to 0 when it hits 360
+      hue = 0;
+    }
+
+    if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+      direction = !direction; // flip the direction if the line width is greater or equal to 100, or less than or equal to 1
+    }
+    if (direction) { // depending on what the direction is, we either increment or decrement the line width.
+      ctx.lineWidth++;
+    } else {
+      ctx.lineWidth--;
+    };
+
+
+  };
+
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+  });
+  canvas.addEventListener('mouseup', () => isDrawing = false);
+  canvas.addEventListener('mouseout', () => isDrawing = false);
+
+
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>
