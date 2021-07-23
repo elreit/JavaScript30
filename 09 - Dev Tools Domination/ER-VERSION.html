@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+    const name = 'Emma'
+
+    //if you want to find out what is causing JS running on a page go to DOM -
+    // right click - break on - attribute modifications. Adds a debugger command
+    // as a break point and indicates the line of code that is causing the attribute
+
+//ALL THE BELOW CAN BE CALLED ON CONSOLE.LOG TO DISPLAY DATA IN THE CONSOLE IN DIFFERENT WAYS
+    // Regular
+    console.log('hello');
+
+    // Interpolated
+    console.log(`hello, my name is ${name}`);
+
+    // Styled - can style text from console.log('%c')
+    console.log('%c I am some great text', 'font-size: 30px; background: red; text-shadow: 10px 10px 0 blue;');
+
+    // warning! shows warning sign in the console next to the line of code
+    console.warn('oh no!');
+
+    // Error :| shows error sign in the console next to the line of code and gives you a stack trace to show where the error has been called
+    console.error('uh oh! This is an error');
+
+    // Info- should show an informatoin sign in the console
+    console.info('Emma is brushing up on her JS');
+
+    // Testing- will only show the message in the console if the answer is false
+    console.assert(1 === 2, 'That is wrong!');
+
+    const p = document.querySelector('p');
+    console.assert(p.classList.contains('ouch'), 'That is wrong');
+
+    // clearing - clears the console
+    // console.clear();
+
+    // Viewing DOM Elements
+    console.log(p);
+    //shows you all the different properties, methods and class list that lives on the element in the console as a drop down
+    console.dir(p);
+
+    // Grouping together - when taking an array and loop it displays the info together by the header provided in console.group.
+    dogs.forEach(dog => {
+      console.group(`${dog.name}`);
+      console.log(`This is a ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age} years old`);
+      console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+      console.groupEnd(`${dog.name}`);
+    });
+
+    // console.groupCollapsed collapses the information logged in the console to be presented neater
+     dogs.forEach(dog => {
+      console.groupCollapsed(`${dog.name}`);
+      console.log(`This is a ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age} years old`);
+      console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+      console.groupEnd(`${dog.name}`);
+    });
+
+    // counting counts in the consolde however many times we use a specific word/number/object/node
+    console.count('Emma');
+    console.count('Emma');
+    console.count('Jack');
+    console.count('Emma');
+    console.count('Emma');
+    console.count('Emma');
+    console.count('Jack');
+    console.count('Jack');
+
+    // timing - see how long something takes. start a timer, do something i.e. fetch data, then run console.timeEnd with the same string you used to init the command
+    console.time('fetching data');
+    fetch('https://api.github.com/users/elreit')
+      .then(data => data.json())
+      .then(data => {
+        console.timeEnd('fetching data');
+        console.log(data);
+      });
+
+    //table - displays array of objects with same properties in a table in the console
+    console.table(dogs);
+
+
+  </script>
+</body>
+</html>
