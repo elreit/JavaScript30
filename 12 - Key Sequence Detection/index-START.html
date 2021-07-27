@@ -7,6 +7,26 @@
 </head>
 <body>
 <script>
+const pressed = [];
+const secretCode = 'reitman';
+
+window.addEventListener('keyup', (e) => {
+  console.log(e.key);
+  pressed.push(e.key);
+  // console.log(pressed);
+    // need to trim the array to the max length we need it to be for the secret code length. max looking for 7 char
+    // need to start counting from the back of the array so we use -
+  pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+    // you go from the back of the array to the number of elements + 1 ahead of the number of secret code char,
+    // trim 5 items in the array from the above index which are the redundant no. of elements not in the secret code
+  if (pressed.join('').includes(secretCode)) {
+    console.log('DING DING');
+    cornify_add();
+  }
+  console.log(pressed);
+});
+
+
 </script>
 </body>
 </html>
